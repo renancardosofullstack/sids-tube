@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build folders
+dist/
+build/
+target/
+
+# Env files
+.env
+.env.local
+.env.development
+.env.production
+
+# Spring sensitive configs
+application-dev.properties
+application-prod.properties
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
