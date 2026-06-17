@@ -15,9 +15,9 @@ interface VideoListProps {
 }
 
 export const VideoList: React.FC<VideoListProps> = ({
-    videos,
-    onDeleteVideo,
-    onVideoClick,
+    videos = [],
+    onDeleteVideo = async () => {},
+    onVideoClick = () => {},
     title = "Catálogo de videos",
     emptyMessage = "Nenhum vídeo encontrado."
 }) => {
@@ -28,8 +28,10 @@ export const VideoList: React.FC<VideoListProps> = ({
     const [isDeleting, setIsDeleting] = useState(false);
     const { isGestor } = useAuth();
 
-    const filteredVideos = useMemo(() => {
-        return videos.filter(video => {
+const filteredVideos = useMemo(() => {
+    const safeVideos = Array.isArray(videos) ? videos : [];
+
+    return safeVideos.filter(video => {
             const title = video.titulo || video.title || '';
             const description = video.descricao || video.description || '';
             const category = video.categoria || video.category || '';
