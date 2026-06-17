@@ -1,0 +1,8 @@
+Prints do Sid's Tube renomeados para o README.
+
+O print de e-mail de notificação ainda não foi incluído.
+Quando tiver esse print, salve-o como:
+07-email-notificacao.png
+
+O detalhe do vídeo foi mantido como:
+08-detalhe-video.png
