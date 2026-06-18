@@ -1,48 +1,51 @@
-export const container = "w-full max-w-6xl mx-auto space-y-6";
+export const inner = "w-full max-w-[1920px] mx-auto px-4 sm:px-10 space-y-6";
+export const container = "p-4 sm:p-8 max-w-[1920px] mx-auto space-y-6";
 
-export const forestHero = "relative overflow-hidden rounded-b-3xl sm:rounded-3xl min-h-[150px] bg-gradient-to-br from-emerald-950 via-emerald-900 to-slate-950 shadow-xl";
-export const forestOverlay = "absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(167,243,208,0.18),transparent_35%),linear-gradient(135deg,rgba(6,78,59,0.92),rgba(15,23,42,0.95))]";
-export const forestContent = "relative flex min-h-[150px] flex-col items-center justify-center px-6 py-8 text-center text-white";
-export const forestBadge = "inline-flex rounded-full bg-emerald-50 px-5 py-2 text-sm font-bold text-emerald-800 shadow-sm";
-export const forestTitle = "mt-4 text-2xl sm:text-4xl font-extrabold tracking-tight";
-export const forestSubtitle = "mt-2 max-w-2xl text-sm sm:text-base text-emerald-50/90";
+export const grid =
+  "grid gap-4 sm:gap-6 grid-cols-3 max-[640px]:grid-cols-2 w-full mx-auto";
 
-export const panel = "rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-green-50 to-white p-5 sm:p-8 lg:p-12 shadow-sm";
-export const title = "text-2xl sm:text-3xl font-extrabold text-slate-800 mb-6";
+export const card =
+  "bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col cursor-pointer h-full";
 
-export const filtersContainer = "rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm space-y-5";
-export const searchWrapper = "relative w-full flex items-center";
-export const searchIcon = "absolute left-4 text-slate-400";
-export const searchInput = "w-full rounded-lg border border-slate-300 bg-white py-3 pl-12 pr-4 text-slate-800 placeholder:text-slate-400 outline-none transition-all focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100";
-export const categoryLabel = "ml-1 mb-3 text-xs font-bold uppercase tracking-wider text-slate-500";
-export const categoryList = "flex gap-2 overflow-x-auto pb-2";
+export const thumbnailWrapper =
+  "h-28 sm:h-40 lg:h-52 bg-slate-800 relative overflow-hidden transition-all";
 
-export const getCategoryButtonClass = (isSelected: boolean) =>
-  `whitespace-nowrap rounded-full border px-5 py-2 text-sm font-semibold transition-all duration-200 ${
-    isSelected
-      ? "border-slate-950 bg-slate-950 text-white shadow-md"
-      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+export const cardContent = "p-4 sm:p-5 flex flex-col flex-1";
+
+export const cardTitle =
+  "text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100 mb-1 sm:mb-2 line-clamp-2 leading-tight";
+
+export const cardDescription =
+  "hidden lg:block text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-2 flex-1";
+
+export const emptyStateContainer = "text-center py-20 bg-white dark:bg-slate-800 rounded-xl border border-dashed border-slate-300 dark:border-slate-600";
+export const emptyStateIconWrapper = "mx-auto w-16 h-16 bg-slate-100 dark:bg-slate-700 rounded-full flex items-center justify-center mb-4";
+export const emptyStateIcon = "text-slate-400 dark:text-slate-500";
+export const emptyStateTitle = "text-lg font-medium text-slate-900 dark:text-slate-100";
+export const emptyStateText = "text-slate-500 dark:text-slate-400";
+
+export const getCategoryButtonClass = (isSelected: boolean) => `px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 border ${isSelected
+  ? 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 border-slate-900 dark:border-slate-100 shadow-md'
+  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700'
   }`;
 
-export const grid = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6";
-export const card = "group cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl";
-export const thumbnailWrapper = "relative h-52 overflow-hidden bg-slate-900";
-export const thumbnailImage = "h-full w-full object-cover transition-transform duration-300 group-hover:scale-105";
-export const thumbnailOverlay = "absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent";
-export const playIcon = "absolute inset-0 m-auto text-white drop-shadow-lg";
-export const durationBadge = "absolute bottom-3 right-3 rounded bg-black/75 px-2 py-1 text-xs font-medium text-white";
+export const header = "flex justify-between items-end gap-4";
+export const title = "text-2xl font-bold text-slate-800 dark:text-slate-100";
 
-export const cardContent = "p-5";
-export const cardHeader = "mb-3 flex items-center justify-between gap-2";
-export const categoryBadge = "inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-1 text-xs font-bold text-emerald-700";
-export const cardTitle = "mb-2 line-clamp-2 text-base font-extrabold leading-snug text-slate-900";
-export const cardDescription = "mb-4 line-clamp-2 text-sm leading-relaxed text-slate-600";
-export const cardFooter = "mt-auto flex items-center justify-between border-t border-slate-100 pt-4";
-export const dateWrapper = "flex items-center gap-1.5 text-xs text-slate-500";
-export const deleteButton = "rounded-full p-2 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600";
+export const filtersContainer = "bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-5";
+export const searchWrapper = "relative w-full flex items-center";
+export const searchIcon = "absolute left-4 text-slate-400 dark:text-slate-500";
+export const searchInput = "w-full pl-12 pr-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600";
 
-export const emptyStateContainer = "mt-6 rounded-xl border border-dashed border-slate-300 bg-white py-20 text-center";
-export const emptyStateIconWrapper = "mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100";
-export const emptyStateIcon = "text-slate-400";
-export const emptyStateTitle = "text-lg font-bold text-slate-900";
-export const emptyStateText = "text-slate-500";
+export const categoryLabel = "text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 ml-1";
+export const categoryList = "flex gap-2 overflow-x-auto pb-2";
+
+export const thumbnailOverlay = "absolute inset-0 bg-gradient-to-t from-black/60 to-transparent";
+export const playIcon = "absolute inset-0 m-auto text-white opacity-80";
+export const durationBadge = "absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded";
+
+export const cardHeader = "flex justify-between items-start mb-3";
+export const categoryBadge = "inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-[10px] sm:text-xs font-semibold";
+export const cardFooter = "flex items-center justify-between pt-2 sm:pt-4 border-t border-slate-100 dark:border-slate-700 mt-auto";
+export const dateWrapper = "flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400";
+export const deleteButton = "text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1 sm:p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900";

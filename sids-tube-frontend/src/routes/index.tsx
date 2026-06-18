@@ -1,79 +1,62 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-
-import { AuthPage } from "../components/AuthPage";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ReactNode } from "react";
 import { Layout } from "../components/Layout";
-import { VideoList } from "../components/VideoList";
-import { Video } from "../types";
+import { useAuth } from "../contexts/AuthContext";
 
-const DEFAULT_VIDEOS: Video[] = [
-  {
-    id: "react-full-course",
-    title: "React Full Course 2022",
-    description: "Curso completo de React para aprender componentes, hooks e construção de interfaces modernas.",
-    category: "Frontend",
-    url: "https://www.youtube.com/watch?v=bMknfKXIFA8",
-    createdAt: "2026-06-15",
-  },
-  {
-    id: "node-zero",
-    title: "Node.js do zero em uma aula",
-    description: "Introdução prática ao backend com Node.js, APIs e lógica para servidores modernos.",
-    category: "Backend",
-    url: "https://www.youtube.com/watch?v=hHM-hr9q4mo",
-    createdAt: "2026-06-15",
-  },
-  {
-    id: "html-css-40-min",
-    title: "HTML + CSS em 40 minutos",
-    description: "Fundamentos essenciais de HTML e CSS para montar páginas bonitas e responsivas.",
-    category: "HTML/CSS",
-    url: "https://www.youtube.com/watch?v=Fhy-5CtVkiM",
-    createdAt: "2026-06-15",
-  },
-];
+import Login from "../pages/Login";
+import Catalogo from "../pages/Catalogo";
+import Curtidas from "../pages/Curtidas";
+import Historico from "../pages/Historico";
+import UploadPage from "../pages/UploadPage";
+import Dashboard from "../pages/Dashboard";
+import VideoDetailPage from "../pages/VideoDetailPage";
+import ComentariosPendentesPage from "../pages/ComentariosPendentesPage";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import Relatorio from "@/pages/Relatorio";
+import Register from "@/pages/Register";
 
-function AppRoutes() {
-  const openVideo = (video: Video) => {
-    const url = video.urlVideo || video.url;
-    if (url) {
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
-  };
+function PrivateRoute({ children }: { children: ReactNode }) {
+  const { isAuthenticated, isLoading } = useAuth();
 
+  if (isLoading) return null;
+  if (!isAuthenticated) return <Navigate to="/login" />;
+
+  return <>{children}</>;
+}
+
+export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Rotas públicas */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/resetar-senha" element={<ResetPassword />} />
+        <Route path="/register" element={<Register />} />
+
         <Route
-          path="/login"
           element={
-            <AuthPage
-              view="LOGIN"
-              onNavigate={() => {}}
-              onLogin={() => {}}
-              onRegister={() => {}}
-            />
+            <PrivateRoute>
+              <Layout />
+            </PrivateRoute>
           }
-        />
-
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/catalogo" replace />} />
+        >
+          <Route path="/" element={<Navigate to="/catalogo" />} />
+          <Route path="/catalogo" element={<Catalogo />} />
+          <Route path="/curtidas" element={<Curtidas />} />
+          <Route path="/historico" element={<Historico />} />
+          <Route path="/videos/:id" element={<VideoDetailPage />} />
+          <Route path="/upload" element={<UploadPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route
-            path="catalogo"
-            element={
-              <VideoList
-                videos={DEFAULT_VIDEOS}
-                onVideoClick={openVideo}
-                onDeleteVideo={() => {}}
-              />
-            }
+            path="/comentarios/pendentes"
+            element={<ComentariosPendentesPage />}
           />
-          <Route path="*" element={<Navigate to="/catalogo" replace />} />
+          <Route path="/relatorios" element={<Relatorio />} />
+          
         </Route>
-
-        <Route path="*" element={<Navigate to="/catalogo" replace />} />
       </Routes>
     </BrowserRouter>
   );
 }
-
-export default AppRoutes;
