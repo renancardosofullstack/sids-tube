@@ -1,233 +1,277 @@
-import React, { useState, useMemo } from 'react';
-import { Video, CATEGORIES } from '../../types';
-import { Search, Trash2, Calendar, Tag, Play, Sparkles } from 'lucide-react';
-import * as styles from './styles';
-import { useAuth } from '../../contexts/AuthContext';
-import { DeleteConfirmModal } from '../ConfirmaDelete';
-import { SidMascot } from '../SidMascot';
+import React, { useMemo, useState } from "react";
+import { Calendar, Play, Search, Tag, Trash2 } from "lucide-react";
+
+import { CATEGORIES, Video } from "../../types";
+import { useAuth } from "../../contexts/AuthContext";
+import { DeleteConfirmModal } from "../ConfirmaDelete";
+import * as styles from "./styles";
 
 interface VideoListProps {
-    videos: Video[];
-    onDeleteVideo: (id: string) => void;
-    onVideoClick: (video: Video) => void;
-    title?: string;
-    emptyMessage?: string;
+  videos?: Video[];
+  onDeleteVideo?: (id: string | number) => void | Promise<void>;
+  onVideoClick?: (video: Video) => void;
+  title?: string;
+  emptyMessage?: string;
 }
 
 export const VideoList: React.FC<VideoListProps> = ({
-    videos = [],
-    onDeleteVideo = async () => {},
-    onVideoClick = () => {},
-    title = "Catálogo de videos",
-    emptyMessage = "Nenhum vídeo encontrado."
+  videos = [],
+  onDeleteVideo = async () => {},
+  onVideoClick,
+  title = "Catálogo de Vídeos",
+  emptyMessage = "Nenhum vídeo encontrado.",
 }) => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [videoToDelete, setVideoToDelete] = useState<Video | null>(null);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const { isGestor } = useAuth();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [videoToDelete, setVideoToDelete] = useState<Video | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { isGestor } = useAuth();
 
-const filteredVideos = useMemo(() => {
+  const filteredVideos = useMemo(() => {
     const safeVideos = Array.isArray(videos) ? videos : [];
+    const normalizedSearch = searchTerm.trim().toLowerCase();
 
-    return safeVideos.filter(video => {
-            const title = video.titulo || video.title || '';
-            const description = video.descricao || video.description || '';
-            const category = video.categoria || video.category || '';
-            const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                description.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesCategory = selectedCategory === 'Todos' || category === selectedCategory;
-            return matchesSearch && matchesCategory;
-        });
-    }, [videos, searchTerm, selectedCategory]);
+    return safeVideos.filter((video) => {
+      const videoTitle = getVideoTitle(video).toLowerCase();
+      const description = getVideoDescription(video).toLowerCase();
+      const category = getVideoCategory(video);
 
-    const formatDate = (timestamp: number) => {
-        return new Date(timestamp).toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric'
-        });
-    };
+      const matchesSearch =
+        !normalizedSearch ||
+        videoTitle.includes(normalizedSearch) ||
+        description.includes(normalizedSearch);
 
-    const getYoutubeThumbnail = (url: string | undefined): string | null => {
-        if (!url) return null;
-        try {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            if (match && match[2].length === 11) {
-                return `https://img.youtube.com/vi/${match[2]}/hqdefault.jpg`;
-            }
-        } catch (e) {
-            return null;
-        }
-        return null;
-    };
+      const matchesCategory =
+        selectedCategory === "Todos" || category === selectedCategory;
 
-    const getVideoUrl = (video: Video) => video.urlVideo || video.url;
-    const getVideoTitle = (video: Video) => video.titulo || video.title || '';
-    const getVideoDescription = (video: Video) => video.descricao || video.description || '';
-    const getVideoCategory = (video: Video) => video.categoria || video.category || '';
-    const getVideoDate = (video: Video) => video.dataEnvio || video.createdAt || 0;
+      return matchesSearch && matchesCategory;
+    });
+  }, [videos, searchTerm, selectedCategory]);
 
-    const handleDeleteClick = (video: Video) => {
-        setVideoToDelete(video);
-        setDeleteModalOpen(true);
-    };
+  const handleVideoClick = (video: Video) => {
+    if (onVideoClick) {
+      onVideoClick(video);
+      return;
+    }
 
-    const handleConfirmDelete = async () => {
-        if (!videoToDelete) return;
-        setIsDeleting(true);
-        try {
-            await onDeleteVideo(videoToDelete.id);
-            setDeleteModalOpen(false);
-            setVideoToDelete(null);
-        } catch (err) {
-            console.error("Erro ao excluir vídeo:", err);
-        } finally {
-            setIsDeleting(false);
-        }
-    };
+    const url = getVideoUrl(video);
+    if (url) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
 
-    const handleCancelDelete = () => {
-        setDeleteModalOpen(false);
-        setVideoToDelete(null);
-    };
+  const handleDeleteClick = (video: Video) => {
+    setVideoToDelete(video);
+    setDeleteModalOpen(true);
+  };
 
-    return (
-        <div className={styles.container}>
-            <div className={styles.hero}>
-                <div>
-                    <div className={styles.eyebrow}>
-                        <Sparkles size={16} />
-                        Operação Trazer o Sid para Casa
-                    </div>
-                    <h2 className={styles.title}>{title}</h2>
-                    <p className={styles.subtitle}>
-                        Escolha um vídeo, dê o play e siga evoluindo sem pressa, mas sem parar.
-                    </p>
-                </div>
-                <SidMascot
-                    size="lg"
-                    message="Eu separei os melhores vídeos para você."
-                    className="hidden md:flex"
-                />
-            </div>
+  const handleConfirmDelete = async () => {
+    if (!videoToDelete) return;
 
-            <div className={styles.filtersContainer}>
+    setIsDeleting(true);
+    try {
+      await onDeleteVideo(videoToDelete.id);
+      setDeleteModalOpen(false);
+      setVideoToDelete(null);
+    } catch (err) {
+      console.error("Erro ao excluir vídeo:", err);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
-                <div className={styles.searchWrapper}>
-                    <Search className={styles.searchIcon} size={20} />
-                    <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Buscar por título ou descrição..."
-                        className={styles.searchInput}
-                    />
-                </div>
-
-                <div>
-                    <p className={styles.categoryLabel}>Filtrar por Categoria</p>
-                    <div className={styles.categoryList}>
-                        <button
-                            onClick={() => setSelectedCategory('Todos')}
-                            className={styles.getCategoryButtonClass(selectedCategory === 'Todos')}
-                        >
-                            Todos
-                        </button>
-                        {CATEGORIES.map(cat => (
-                            <button
-                                key={cat}
-                                onClick={() => setSelectedCategory(cat)}
-                                className={styles.getCategoryButtonClass(selectedCategory === cat)}
-                            >
-                                {cat}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {filteredVideos.length === 0 ? (
-                <div className={styles.emptyStateContainer}>
-                    <div className={styles.emptyStateIconWrapper}>
-                        <Search className={styles.emptyStateIcon} size={24} />
-                    </div>
-                    <h3 className={styles.emptyStateTitle}>{emptyMessage}</h3>
-                    <p className={styles.emptyStateText}>Tente ajustar seus filtros.</p>
-                </div>
-            ) : (
-                <div className={styles.grid}>
-                    {filteredVideos.map(video => (
-                        <div
-                            key={video.id}
-                            className={styles.card}
-                            onClick={() => onVideoClick(video)}
-                        >
-                            <div className={styles.thumbnailWrapper}>
-                                {getYoutubeThumbnail(video.url) ? (
-                                    <img
-                                        src={getYoutubeThumbnail(video.url)!}
-                                        alt={video.title}
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : null}
-                                <div className={styles.thumbnailOverlay}></div>
-                                <Play size={48} className={styles.playIcon} />
-                                <span className={styles.durationBadge}>
-                                    Video
-                                </span>
-                            </div>
-
-                            <div className={styles.cardContent}>
-                                <div className={styles.cardHeader}>
-                                    <span className={styles.categoryBadge}>
-                                        <Tag size={12} />
-                                        {video.category}
-                                    </span>
-                                </div>
-
-                                <h3 className={styles.cardTitle}>
-                                    {video.title}
-                                </h3>
-
-                                <p className={styles.cardDescription}>
-                                    {video.description}
-                                </p>
-
-                                <div className={styles.cardFooter}>
-                                    <div className={styles.dateWrapper}>
-                                        <Calendar size={14} />
-                                        {formatDate(video.createdAt)}
-                                    </div>
-                                    {isGestor && (
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleDeleteClick(video);
-                                            }}
-                                            className={styles.deleteButton}
-                                            title="Excluir vídeo"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-            <DeleteConfirmModal
-                isOpen={deleteModalOpen}
-                videoTitle={videoToDelete?.title || ''}
-                onConfirm={handleConfirmDelete}
-                onCancel={handleCancelDelete}
-                isLoading={isDeleting}
-            />
+  return (
+    <div className={styles.container}>
+      <section className={styles.forestHero}>
+        <div className={styles.forestOverlay} />
+        <div className={styles.forestContent}>
+          <span className={styles.forestBadge}>Operação Trazer o Sid para Casa</span>
+          <h1 className={styles.forestTitle}>Sid's Tube</h1>
+          <p className={styles.forestSubtitle}>
+            Aprenda tecnologia em um catálogo organizado, acessível e com a calma estratégica de uma preguiça.
+          </p>
         </div>
-    );
+      </section>
+
+      <section className={styles.panel}>
+        <h2 className={styles.title}>{title}</h2>
+
+        <div className={styles.filtersContainer}>
+          <div className={styles.searchWrapper}>
+            <Search className={styles.searchIcon} size={20} />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder="Buscar por título ou descrição..."
+              className={styles.searchInput}
+            />
+          </div>
+
+          <div>
+            <p className={styles.categoryLabel}>Filtrar por Categoria</p>
+            <div className={styles.categoryList}>
+              <button
+                type="button"
+                onClick={() => setSelectedCategory("Todos")}
+                className={styles.getCategoryButtonClass(
+                  selectedCategory === "Todos"
+                )}
+              >
+                Todos
+              </button>
+
+              {CATEGORIES.map((category) => (
+                <button
+                  type="button"
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={styles.getCategoryButtonClass(
+                    selectedCategory === category
+                  )}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {filteredVideos.length === 0 ? (
+          <div className={styles.emptyStateContainer}>
+            <div className={styles.emptyStateIconWrapper}>
+              <Search className={styles.emptyStateIcon} size={24} />
+            </div>
+            <h3 className={styles.emptyStateTitle}>{emptyMessage}</h3>
+            <p className={styles.emptyStateText}>Tente ajustar seus filtros.</p>
+          </div>
+        ) : (
+          <div className={styles.grid}>
+            {filteredVideos.map((video) => (
+              <article
+                key={video.id}
+                className={styles.card}
+                onClick={() => handleVideoClick(video)}
+              >
+                <div className={styles.thumbnailWrapper}>
+                  {getVideoThumbnail(video) ? (
+                    <img
+                      src={getVideoThumbnail(video)!}
+                      alt={getVideoTitle(video)}
+                      className={styles.thumbnailImage}
+                    />
+                  ) : null}
+                  <div className={styles.thumbnailOverlay} />
+                  <Play size={48} className={styles.playIcon} />
+                  <span className={styles.durationBadge}>Vídeo</span>
+                </div>
+
+                <div className={styles.cardContent}>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.categoryBadge}>
+                      <Tag size={12} />
+                      {getVideoCategory(video)}
+                    </span>
+                  </div>
+
+                  <h3 className={styles.cardTitle}>{getVideoTitle(video)}</h3>
+                  <p className={styles.cardDescription}>
+                    {getVideoDescription(video)}
+                  </p>
+
+                  <div className={styles.cardFooter}>
+                    <div className={styles.dateWrapper}>
+                      <Calendar size={14} />
+                      {formatDate(getVideoDate(video))}
+                    </div>
+
+                    {isGestor && (
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleDeleteClick(video);
+                        }}
+                        className={styles.deleteButton}
+                        title="Excluir vídeo"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <DeleteConfirmModal
+        isOpen={deleteModalOpen}
+        videoTitle={getVideoTitle(videoToDelete)}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          setDeleteModalOpen(false);
+          setVideoToDelete(null);
+        }}
+        isLoading={isDeleting}
+      />
+    </div>
+  );
 };
+
+function getVideoUrl(video?: Video | null) {
+  return video?.urlVideo || video?.url || "";
+}
+
+function getVideoTitle(video?: Video | null) {
+  return video?.titulo || video?.title || "Vídeo sem título";
+}
+
+function getVideoDescription(video?: Video | null) {
+  return video?.descricao || video?.description || "Conteúdo selecionado para sua evolução.";
+}
+
+function getVideoCategory(video?: Video | null) {
+  return video?.categoria || video?.category || "Outros";
+}
+
+function getVideoDate(video?: Video | null) {
+  return video?.dataEnvio || video?.createdAt || Date.now();
+}
+
+function formatDate(dateValue: string | number) {
+  const date = typeof dateValue === "number" ? new Date(dateValue) : new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Data indisponível";
+  }
+
+  return date.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function getVideoThumbnail(video: Video) {
+  if (video.urlThumbnail || video.thumbnail) {
+    return video.urlThumbnail || video.thumbnail || null;
+  }
+
+  const url = getVideoUrl(video);
+  if (!url) return null;
+
+  const match = url.match(
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+  );
+
+  if (match && match[2].length === 11) {
+    return `https://img.youtube.com/vi/${match[2]}/hqdefault.jpg`;
+  }
+
+  return null;
+}
 
 export default VideoList;

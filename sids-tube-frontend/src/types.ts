@@ -1,42 +1,40 @@
-﻿export const Role = {
-  ADMIN: "admin",
-  GESTOR: "gestor",
-  USUARIO: "usuario",
-  USER: "usuario",
-  Admin: "admin",
-  Gestor: "gestor",
-  Usuario: "usuario",
-  User: "usuario",
-  admin: "admin",
-  gestor: "gestor",
-  usuario: "usuario",
+export const Role = {
+  ADMIN: "ADMIN",
+  GESTOR: "GESTOR",
+  USUARIO: "USUARIO",
+  admin: "ADMIN",
+  gestor: "GESTOR",
+  usuario: "USUARIO",
 } as const;
 
-export type Role = (typeof Role)[keyof typeof Role];
+export type Role = (typeof Role)[keyof typeof Role] | "admin" | "gestor" | "usuario";
 
 export const AppView = {
-  LOGIN: "login",
-  REGISTER: "register",
-  HOME: "home",
-  DASHBOARD: "dashboard",
-  VIDEOS: "videos",
-  AUTH: "auth",
-  Login: "login",
-  Register: "register",
-  Home: "home",
-  Dashboard: "dashboard",
-  Videos: "videos",
-  Auth: "auth",
-  login: "login",
-  register: "register",
-  home: "home",
-  dashboard: "dashboard",
-  videos: "videos",
-  auth: "auth",
+  LOGIN: "LOGIN",
+  REGISTER: "REGISTER",
+  CATALOGO: "CATALOGO",
+  DASHBOARD: "DASHBOARD",
+  UPLOAD: "UPLOAD",
+  login: "LOGIN",
+  register: "REGISTER",
+  catalogo: "CATALOGO",
+  dashboard: "DASHBOARD",
+  upload: "UPLOAD",
 } as const;
 
 export type AppView = (typeof AppView)[keyof typeof AppView];
 
+export const CATEGORIES = [
+  "Desenvolvimento Web",
+  "Frontend",
+  "Backend",
+  "DevOps",
+  "HTML/CSS",
+  "Segurança",
+  "Outros",
+] as const;
+
+export type Category = (typeof CATEGORIES)[number];
 export type UserRole = Role;
 
 export type User = {
@@ -59,25 +57,18 @@ export type LoginData = {
 
 export type Video = {
   id: string | number;
-  titulo: string;
+  titulo?: string;
+  title?: string;
   descricao?: string;
+  description?: string;
   categoria?: string;
+  category?: string;
   urlVideo?: string;
+  url?: string;
   urlThumbnail?: string;
-  dataEnvio?: string;
+  thumbnail?: string;
+  dataEnvio?: string | number;
+  createdAt?: string | number;
 };
 
 export type VideoType = Video;
-
-export const CATEGORIES = [
-  "Todos",
-  "Aulas",
-  "Treinamentos",
-  "Tutoriais",
-  "Comunicados",
-  "Institucional",
-  "Tecnologia",
-  "Outros"
-] as const;
-
-export type Category = (typeof CATEGORIES)[number];
