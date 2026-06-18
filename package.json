@@ -1,6 +1,6 @@
-{
+﻿{
   "scripts": {
-    "build": "npm --prefix sids-tube-frontend install && npm --prefix sids-tube-frontend run build",
-    "start": "npm --prefix sids-tube-frontend run start"
+    "build": "cd sids-tube-frontend && npm install && npm run build",
+    "start": "cd sids-tube-frontend && npm run start"
   }
 }
