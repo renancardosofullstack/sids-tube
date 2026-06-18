@@ -60,10 +60,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://34.30.147.208:3001"
-        ));
+        config.setAllowedOriginPatterns(List.of(
+        "http://localhost:5173",
+        "http://localhost:3001",
+        "https://*.vercel.app",
+        "https://sids-tube-8y4kawwa1-renan-cardoso-s-projects.vercel.app"
+));
 
         config.setAllowedMethods(Arrays.asList(
                 "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"
