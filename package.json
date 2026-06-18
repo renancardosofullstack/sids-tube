@@ -1,4 +1,4 @@
-﻿{
+{
   "scripts": {
     "build": "cd sids-tube-frontend && npm install && npm run build",
     "start": "cd sids-tube-frontend && npm run start"
