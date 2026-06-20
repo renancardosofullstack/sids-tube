@@ -73,7 +73,7 @@ export const CATEGORIES = [
   "Aulas",
   "Treinamentos",
   "Tutoriais",
-  "Comunicados",
+  "Podcast",
   "Institucional",
   "Tecnologia",
   "Outros",
