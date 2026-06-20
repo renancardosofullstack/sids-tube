@@ -70,14 +70,13 @@ export type Video = {
 export type VideoType = Video;
 
 export const CATEGORIES = [
-  "Todos",
   "Aulas",
   "Treinamentos",
   "Tutoriais",
   "Comunicados",
   "Institucional",
   "Tecnologia",
-  "Outros"
+  "Outros",
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
