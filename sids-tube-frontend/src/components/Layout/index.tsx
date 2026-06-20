@@ -56,11 +56,11 @@ export const Layout = () => {
       )}
 
       <aside
-        className={`${styles.getSidebarClass(
-          isMenuOpen
-        )} bg-gradient-to-b from-emerald-950 via-green-950 to-slate-950 border-r border-emerald-800/60`}
-      >
-        <div className="p-6 border-b border-emerald-800/60">
+  		className={`${styles.getSidebarClass(
+    		isMenuOpen
+ 		 )} lg:translate-x-0 bg-gradient-to-b from-emerald-950 via-green-950 to-slate-950 border-r border-emerald-800/60`}
+	>
+  <div className="p-6 border-b border-emerald-800/60">
           <div className="flex items-center gap-4">
             <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-400 via-green-500 to-teal-700 shadow-xl flex items-center justify-center text-3xl border border-white/10">
               🦥
@@ -171,7 +171,7 @@ export const Layout = () => {
         </div>
       </aside>
 
-      <main id="main-content" className={styles.main} role="main">
+      <main id="main-content" className={`${styles.main} lg:ml-64`} role="main">
         <div className={styles.contentWrapper}>
           <Outlet />
         </div>
