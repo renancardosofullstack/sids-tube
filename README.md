@@ -480,3 +480,42 @@ Desenvolvedor Full Stack em formação, com foco em React, JavaScript, TypeScrip
 ## ⭐ Observação
 
 Este projeto foi desenvolvido como uma aplicação Full Stack completa, com foco em prática profissional, portfólio e simulação de demandas reais de desenvolvimento.
+
+---
+
+## ✅ Status Atual da Versão 1.0
+
+O Sid's Tube está com a versão 1.0 funcional e publicada.
+
+### Produção
+
+- Frontend publicado na Vercel;
+- Backend publicado no Render;
+- Banco PostgreSQL hospedado no Render;
+- Login funcionando;
+- Cadastro de usuários funcionando;
+- Upload de vídeos funcionando;
+- Catálogo logado funcionando;
+- Sidebar responsiva corrigida;
+- Reload em rotas internas da Vercel corrigido;
+- Página pública de vídeos adicionada.
+
+Backend em produção:
+
+https://sids-tube-backend.onrender.com
+
+### Observação sobre e-mails
+
+A funcionalidade de e-mail foi implementada como parte da estrutura do projeto, porém não foi finalizada em produção por limitação do plano gratuito do Render, que bloqueia ou limita conexões SMTP externas.
+
+Por isso, o envio de e-mails ficará como melhoria futura para uma próxima versão, podendo ser resolvido com outro provedor de hospedagem, serviço dedicado de e-mail ou plano pago.
+
+### Próximas melhorias
+
+- Melhorar a vitrine pública de vídeos;
+- Finalizar envio de e-mails em ambiente de produção;
+- Criar domínio personalizado;
+- Adicionar testes automatizados;
+- Melhorar SEO da página pública;
+- Publicar release oficial no GitHub.
+
