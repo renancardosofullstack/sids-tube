@@ -174,3 +174,19 @@ html.custom-scrollbar ::-webkit-scrollbar-thumb:hover,
 html.custom-scrollbar body::-webkit-scrollbar-thumb:hover {
   background: #2563eb;
 }
+
+.access-btn {
+  position: fixed !important;
+  right: 16px !important;
+  bottom: 24px !important;
+  top: auto !important;
+  z-index: 9999 !important;
+}
+
+.access-menu {
+  position: fixed !important;
+  right: 16px !important;
+  bottom: 82px !important;
+  top: auto !important;
+  z-index: 9998 !important;
+}

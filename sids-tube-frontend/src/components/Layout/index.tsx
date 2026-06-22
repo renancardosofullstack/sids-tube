@@ -1,4 +1,4 @@
-import { Outlet, useLocation, Link, useNavigate } from "react-router-dom";
+﻿import { Outlet, useLocation, Link, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Upload,
@@ -11,7 +11,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as styles from "./styles";
 import { useAuth } from "../../contexts/AuthContext";
@@ -20,15 +20,32 @@ export const Layout = () => {
   const { isGestor, isUsuario, user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return window.innerWidth >= 1024;
+  });
 
   const displayName = user?.nome ?? user?.name ?? user?.email ?? "Usuário";
   const roleLabel = isGestor ? "Portal do Gestor" : "Área do Usuário";
 
+  useEffect(() => {
+    const syncSidebar = () => {
+      setIsMenuOpen(window.innerWidth >= 1024);
+    };
+
+    syncSidebar();
+    window.addEventListener("resize", syncSidebar);
+
+    return () => window.removeEventListener("resize", syncSidebar);
+  }, []);
+
   const isActive = (path: string) => location.pathname.startsWith(path);
 
   const handleLinkClick = () => {
-    setIsMenuOpen(false);
+    if (window.innerWidth < 1024) {
+      setIsMenuOpen(false);
+    }
   };
 
   const menuItemClass = (active: boolean) =>
@@ -40,7 +57,9 @@ export const Layout = () => {
     <div className={`${styles.container} bg-gradient-to-br from-emerald-950 via-green-900 to-slate-950`}>
       <button
         onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className="fixed top-4 left-4 z-50 h-10 w-10 rounded-xl bg-emerald-950 text-emerald-50 border border-emerald-700/60 shadow-lg flex items-center justify-center lg:hidden"
+        className={`fixed top-4 z-50 h-10 w-10 rounded-xl bg-emerald-950 text-emerald-50 border border-emerald-700/60 shadow-lg flex items-center justify-center transition-all ${
+          isMenuOpen ? "left-4 lg:left-[17rem]" : "left-4"
+        }`}
         aria-label="Abrir menu"
         aria-expanded={isMenuOpen}
       >
@@ -49,18 +68,18 @@ export const Layout = () => {
 
       {isMenuOpen && (
         <div
-          className={styles.overlay}
+          className={`${styles.overlay} lg:hidden`}
           onClick={() => setIsMenuOpen(false)}
           aria-hidden="true"
         />
       )}
 
       <aside
-  		className={`${styles.getSidebarClass(
-    		isMenuOpen
- 		 )} lg:translate-x-0 bg-gradient-to-b from-emerald-950 via-green-950 to-slate-950 border-r border-emerald-800/60`}
-	>
-  <div className="p-6 border-b border-emerald-800/60">
+        className={`${styles.getSidebarClass(
+          isMenuOpen
+        )} bg-gradient-to-b from-emerald-950 via-green-950 to-slate-950 border-r border-emerald-800/60`}
+      >
+        <div className="p-6 border-b border-emerald-800/60">
           <div className="flex items-center gap-4">
             <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-400 via-green-500 to-teal-700 shadow-xl flex items-center justify-center text-3xl border border-white/10">
               🦥
@@ -171,7 +190,13 @@ export const Layout = () => {
         </div>
       </aside>
 
-      <main id="main-content" className={`${styles.main} lg:ml-64`} role="main">
+      <main
+        id="main-content"
+        className={`${styles.main} ${
+          isMenuOpen ? "lg:ml-64" : "lg:ml-0"
+        } overflow-x-hidden transition-all duration-300`}
+        role="main"
+      >
         <div className={styles.contentWrapper}>
           <Outlet />
         </div>
