@@ -1,4 +1,3 @@
-,
 # 🎥 Sid's Tube
 
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=111)
@@ -28,25 +27,6 @@ O projeto também recebeu uma identidade visual própria baseada em tons verdes,
 
 ## 📸 Demonstração
 
-Coloque os prints dentro da pasta:
-
-```txt
-SidsTube-Prints-Portfolio
-```
-
-Use exatamente estes nomes para os arquivos:
-
-```txt
-01-login-sids-tube.png
-02-catalogo-videos.png
-03-menu-lateral.png
-04-dashboard-estatisticas.png
-05-comentarios-pendentes.png
-06-enviar-video.png
-07-email-notificacao.png
-08-detalhe-video.png
-```
-
 ### Tela de Login
 
 ![Login do Sid's Tube](SidsTube-Prints-Portfolio/01-login-sids-tube.png)
@@ -70,10 +50,6 @@ Use exatamente estes nomes para os arquivos:
 ### Cadastro de Vídeos
 
 ![Cadastro de vídeos](SidsTube-Prints-Portfolio/06-enviar-video.png)
-
-### Notificação por E-mail
-
-![Notificação por e-mail](SidsTube-Prints-Portfolio/07-email-notificacao.png)
 
 ### Detalhe do Vídeo
 
